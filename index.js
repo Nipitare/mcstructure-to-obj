@@ -1,0 +1,165 @@
+const fs = require("fs");
+const nbt = require("prismarine-nbt");
+const blockModels = require("./blockModels")
+
+let blockArray
+let structureSize
+
+async function getDataFromStructureFile(file) {
+  const buffer = fs.readFileSync(file);
+  const { parsed, type } = await nbt.parse(buffer);
+  const blockPalette = parsed.value.structure.value.palette.value.default.value.block_palette.value.value
+  const dataArray = parsed.value.structure.value.block_indices.value.value.at(0).value
+  const structureSize = parsed.value.size.value.value
+
+  let blockStates
+
+  for (let e = 0; e < blockPalette.length; e++) {
+
+    if (JSON.stringify(blockPalette.at(e).states.value) == '{}') blockStates = null
+    else blockStates = blockPalette.at(e).states.value
+
+    for (let i = 0; i < dataArray.length; i++) {
+      if (dataArray[i] === e) {
+        dataArray[i] = [ blockPalette.at(e).name.value, blockStates]
+      };
+    };
+  };
+
+  return [ dataArray, structureSize ]
+};
+
+async function createObj(blocks, size) {
+  let code = ''
+  let x = 0
+  let y = 0
+  let z = 0
+  let vert = 0
+  for (let i = 0; i < blocks.length; i++) {
+
+    switch (true) {
+      case blocks[i][0].includes('air'): {
+        code = code + blockModels.getModel(x, y, z, vert, 'air')
+        vert = vert + 8
+        break
+      };
+      case blocks[i][0].includes('slab'): {
+        switch (true) {
+          case JSON.stringify(blocks[i][1]).includes('top'): {
+            code = code  + blockModels.getModel(x, y, z, vert, 'slab_top')
+            vert = vert + 8
+            break
+          }
+          case JSON.stringify(blocks[i][1]).includes('bottom'): {
+            code = code  + blockModels.getModel(x, y, z, vert, 'slab_bottom')
+            vert = vert + 8
+            break
+          }
+        }
+        break
+      };
+      case blocks[i][0].includes('wall'): {
+        const isNorthShort = blocks[i][1].wall_connection_type_north.value == 'short'
+        const isEastShort = blocks[i][1].wall_connection_type_east.value == 'short'
+        const isSouthShort = blocks[i][1].wall_connection_type_south.value == 'short'
+        const isWestShort = blocks[i][1].wall_connection_type_west.value == 'short'
+
+        const isNorthTall = blocks[i][1].wall_connection_type_north.value == 'tall'
+        const isEastTall = blocks[i][1].wall_connection_type_east.value == 'tall'
+        const isSouthTall = blocks[i][1].wall_connection_type_south.value == 'tall'
+        const isWestTall = blocks[i][1].wall_connection_type_west.value == 'tall'
+
+        const hasPost = blocks[i][1].wall_post_bit.value == 1
+
+        if (!hasPost && isNorthShort && isSouthShort) {
+          code = code + blockModels.getModel(x, y, z, vert, 'wall_no_post_north_south_short')
+          vert = vert + 8
+          break
+        }
+        if (!hasPost && isEastShort && isWestShort) {
+          code = code + blockModels.getModel(x, y, z, vert, 'wall_no_post_east_west_short')
+          vert = vert + 8
+          break
+        }
+        if (!hasPost && isNorthTall && isSouthTall) {
+          code = code + blockModels.getModel(x, y, z, vert, 'wall_no_post_north_south_tall')
+          vert = vert + 8
+          break
+        }
+        if (!hasPost && isEastTall && isWestTall) {
+          code = code + blockModels.getModel(x, y, z, vert, 'wall_no_post_east_west_tall')
+          vert = vert + 8
+          break
+        }
+
+        code = code + blockModels.getModel(x, y, z, vert, 'wall_post')
+        vert = vert + 8
+
+        if (isNorthShort) {
+          code = code + blockModels.getModel(x, y, z, vert, 'wall_north_short')
+          vert = vert + 8
+        }
+        if (isEastShort) {
+          code = code + blockModels.getModel(x, y, z, vert, 'wall_east_short')
+          vert = vert + 8
+        }
+        if (isSouthShort) {
+          code = code + blockModels.getModel(x, y, z, vert, 'wall_south_short')
+          vert = vert + 8
+        }
+        if (isWestShort) {
+          code = code + blockModels.getModel(x, y, z, vert, 'wall_west_short')
+          vert = vert + 8
+        }
+        if (isNorthTall) {
+          code = code + blockModels.getModel(x, y, z, vert, 'wall_north_tall')
+          vert = vert + 8
+        }
+        if (isEastTall) {
+          code = code + blockModels.getModel(x, y, z, vert, 'wall_east_tall')
+          vert = vert + 8
+        }
+        if (isSouthTall) {
+          code = code + blockModels.getModel(x, y, z, vert, 'wall_south_tall')
+          vert = vert + 8
+        }
+        if (isWestTall) {
+          code = code + blockModels.getModel(x, y, z, vert, 'wall_west_tall')
+          vert = vert + 8
+        }
+        break
+      };
+      default: {
+        code = code + blockModels.getModel(x, y, z, vert, 'fullBlock')
+        vert = vert + 8
+      };
+    };
+    z++
+
+    if (z >= size[2]) {
+      z = 0
+      y++
+    };
+
+    if (y >= size[1]) {
+      y = 0
+      x++
+    };
+  };
+
+  console.log()
+
+  fs.writeFile('output.obj', code, (err) => {
+			if (err) {
+			console.error('Error writing data file:', err);
+    			return;
+  			}
+		})
+}
+
+getDataFromStructureFile('fenc.mcstructure').then(e => {
+  blockArray = e[0]
+  structureSize = e[1]
+  //console.log(blockArray[0])
+  createObj(blockArray, structureSize)
+})
