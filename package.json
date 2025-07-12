@@ -7,7 +7,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "MIT",
+  "license": "GNU General Public License v3.0",
   "description": "",
   "dependencies": {
     "prismarine-nbt": "^2.7.0"
