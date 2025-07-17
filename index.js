@@ -7,27 +7,57 @@ let structureSize
 
 async function getDataFromStructureFile(file) {
   const buffer = fs.readFileSync(file);
-  const { parsed, type } = await nbt.parse(buffer);
+  const { parsed } = await nbt.parse(buffer);
   const blockPalette = parsed.value.structure.value.palette.value.default.value.block_palette.value.value
   const dataArray = parsed.value.structure.value.block_indices.value.value.at(0).value
   const structureSize = parsed.value.size.value.value
 
-  let blockStates
+  let x = 0
+  let y = 0
+  let z = 0
 
   for (let e = 0; e < blockPalette.length; e++) {
-
-    if (JSON.stringify(blockPalette.at(e).states.value) == '{}') blockStates = null
-    else blockStates = blockPalette.at(e).states.value
-
     for (let i = 0; i < dataArray.length; i++) {
       if (dataArray[i] === e) {
-        dataArray[i] = [ blockPalette.at(e).name.value, blockStates]
+        dataArray[i] = { "blockName": blockPalette.at(e).name.value, "blockStates": blockPalette.at(e).states.value }
       };
+    };
+  };
+
+  for (let i = 0; i < dataArray.length; i++) {
+    dataArray[i] = { ...dataArray[i], cords: [x, y, z] }
+    z++
+
+    if (z >= structureSize[2]) {
+      z = 0
+      y++
+    };
+
+    if (y >= structureSize[1]) {
+      y = 0
+      x++
     };
   };
 
   return [ dataArray, structureSize ]
 };
+
+function getMissingBlockStates(allBlocks) {
+  let x = 0
+  let y = 0
+  let z = 0
+
+  let filteredArray = []
+
+  allBlocks.forEach(i => {
+    if (i.blockName.includes('fence')) {
+        filteredArray = [...filteredArray, i]
+    }
+  });
+
+  console.log(filteredArray)
+}
+
 
 async function createObj(blocks, size) {
   let code = ''
@@ -35,22 +65,26 @@ async function createObj(blocks, size) {
   let y = 0
   let z = 0
   let vert = 0
+  
   for (let i = 0; i < blocks.length; i++) {
+    x = blocks[i].cords[0]
+    y = blocks[i].cords[1]
+    z = blocks[i].cords[2]
 
     switch (true) {
-      case blocks[i][0].includes('air'): {
+      case blocks[i].blockName.includes('air'): {
         code = code + blockModels.getModel(x, y, z, vert, 'air')
         vert = vert + 8
         break
       };
-      case blocks[i][0].includes('slab'): {
+      case blocks[i].blockName.includes('slab'): {
         switch (true) {
-          case JSON.stringify(blocks[i][1]).includes('top'): {
+          case JSON.stringify(blocks[i].blockStates).includes('top'): {
             code = code  + blockModels.getModel(x, y, z, vert, 'slab_top')
             vert = vert + 8
             break
           }
-          case JSON.stringify(blocks[i][1]).includes('bottom'): {
+          case JSON.stringify(blocks[i].blockStates).includes('bottom'): {
             code = code  + blockModels.getModel(x, y, z, vert, 'slab_bottom')
             vert = vert + 8
             break
@@ -58,18 +92,18 @@ async function createObj(blocks, size) {
         }
         break
       };
-      case blocks[i][0].includes('wall'): {
-        const isNorthShort = blocks[i][1].wall_connection_type_north.value == 'short'
-        const isEastShort = blocks[i][1].wall_connection_type_east.value == 'short'
-        const isSouthShort = blocks[i][1].wall_connection_type_south.value == 'short'
-        const isWestShort = blocks[i][1].wall_connection_type_west.value == 'short'
+      case blocks[i].blockName.includes('wall'): {
+        const isNorthShort = blocks[i].blockStates.wall_connection_type_north.value == 'short'
+        const isEastShort = blocks[i].blockStates.wall_connection_type_east.value == 'short'
+        const isSouthShort = blocks[i].blockStates.wall_connection_type_south.value == 'short'
+        const isWestShort = blocks[i].blockStates.wall_connection_type_west.value == 'short'
 
-        const isNorthTall = blocks[i][1].wall_connection_type_north.value == 'tall'
-        const isEastTall = blocks[i][1].wall_connection_type_east.value == 'tall'
-        const isSouthTall = blocks[i][1].wall_connection_type_south.value == 'tall'
-        const isWestTall = blocks[i][1].wall_connection_type_west.value == 'tall'
+        const isNorthTall = blocks[i].blockStates.wall_connection_type_north.value == 'tall'
+        const isEastTall = blocks[i].blockStates.wall_connection_type_east.value == 'tall'
+        const isSouthTall = blocks[i].blockStates.wall_connection_type_south.value == 'tall'
+        const isWestTall = blocks[i].blockStates.wall_connection_type_west.value == 'tall'
 
-        const hasPost = blocks[i][1].wall_post_bit.value == 1
+        const hasPost = blocks[i].blockStates.wall_post_bit.value == 1
 
         if (!hasPost && isNorthShort && isSouthShort) {
           code = code + blockModels.getModel(x, y, z, vert, 'wall_no_post_north_south_short')
@@ -134,20 +168,7 @@ async function createObj(blocks, size) {
         vert = vert + 8
       };
     };
-    z++
-
-    if (z >= size[2]) {
-      z = 0
-      y++
-    };
-
-    if (y >= size[1]) {
-      y = 0
-      x++
-    };
   };
-
-  console.log()
 
   fs.writeFile('output.obj', code, (err) => {
 			if (err) {
@@ -157,9 +178,10 @@ async function createObj(blocks, size) {
 		})
 }
 
-getDataFromStructureFile('fenc.mcstructure').then(e => {
+getDataFromStructureFile('fence.mcstructure').then(e => {
   blockArray = e[0]
   structureSize = e[1]
-  //console.log(blockArray[0])
+  getMissingBlockStates(blockArray)
+  //console.log(blockArray[2].blockStates)
   createObj(blockArray, structureSize)
 })

@@ -299,6 +299,6 @@ switch (block) {
               f ${2+vert} ${1+vert} ${3+vert} ${4+vert}
               f ${6+vert} ${5+vert} ${1+vert} ${2+vert}\n`
     };
-}  
+}
 }
 module.exports = { getModel }
