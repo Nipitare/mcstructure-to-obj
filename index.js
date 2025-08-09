@@ -1,6 +1,6 @@
 const fs = require("fs");
 const nbt = require("prismarine-nbt");
-const blockModels = require("./blockModels")
+const blockModels = require("./blockModels");
 
 let blockArray
 let structureSize
@@ -16,16 +16,8 @@ async function getDataFromStructureFile(file) {
   let y = 0
   let z = 0
 
-  for (let e = 0; e < blockPalette.length; e++) {
-    for (let i = 0; i < dataArray.length; i++) {
-      if (dataArray[i] === e) {
-        dataArray[i] = { "blockName": blockPalette.at(e).name.value, "blockStates": blockPalette.at(e).states.value }
-      };
-    };
-  };
-
   for (let i = 0; i < dataArray.length; i++) {
-    dataArray[i] = { ...dataArray[i], cords: [x, y, z] }
+    dataArray[i] = { "blockName": blockPalette[dataArray[i]].name.value, "blockStates": blockPalette[dataArray[i]].states.value, cords: {x, y, z} }
     z++
 
     if (z >= structureSize[2]) {
@@ -61,15 +53,11 @@ function getMissingBlockStates(allBlocks) {
 
 async function createObj(blocks, size) {
   let code = ''
-  let x = 0
-  let y = 0
-  let z = 0
+  let { x, y, z } = 0
   let vert = 0
   
   for (let i = 0; i < blocks.length; i++) {
-    x = blocks[i].cords[0]
-    y = blocks[i].cords[1]
-    z = blocks[i].cords[2]
+    ({x, y, z} = blocks[i].cords)
 
     switch (true) {
       case blocks[i].blockName.includes('air'): {
