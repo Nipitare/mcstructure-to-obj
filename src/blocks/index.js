@@ -1,9 +1,9 @@
-const { air } = require('./air')
-const { fence } = require('./fence')
-const { fullBlock } = require('./fullBlock')
-const { slab } = require('./slab')
-const { stairs } = require('./stairs')
-const { wall } = require('./wall')
+import air from './air.js'
+import fence from './fence.js'
+import fullBlock from './fullBlock.js'
+import slab from './slab.js'
+import stairs from './stairs.js'
+import wall from './wall.js'
 
 const blockData = {
     air,
@@ -14,4 +14,4 @@ const blockData = {
     wall
 }
 
-module.exports = { blockData }
+export default blockData

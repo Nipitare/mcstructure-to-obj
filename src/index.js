@@ -1,13 +1,13 @@
-const fs = require('fs');
-const nbt = require('prismarine-nbt');
-const { blockData } = require('./blocks')
+import { readFileSync, writeFile } from 'fs';
+import { parse } from 'prismarine-nbt';
+import blockData from './blocks/index.js';
 
 let blockArray
 let structureSize
 
 async function getDataFromStructureFile(file) {
-  const buffer = fs.readFileSync(file);
-  const { parsed } = await nbt.parse(buffer);
+  const buffer = readFileSync(file);
+  const { parsed } = await parse(buffer);
   const blockPalette = parsed.value.structure.value.palette.value.default.value.block_palette.value.value
   const dataArray = parsed.value.structure.value.block_indices.value.value.at(0).value
   const structureSize = parsed.value.size.value.value
@@ -68,7 +68,7 @@ async function createObj(blocks, size) {
   }
   };
 
-  fs.writeFile('output.obj', code, (err) => {
+  writeFile('output.obj', code, (err) => {
 			if (err) {
 			console.error('Error writing data file:', err);
     			return;

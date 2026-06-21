@@ -12,4 +12,4 @@ const air = {
     }
 }
 
-module.exports = { air }
+export default air

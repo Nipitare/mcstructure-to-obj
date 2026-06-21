@@ -183,4 +183,4 @@ const fence = {
     }
 }
 
-module.exports = { fence }
+export default fence

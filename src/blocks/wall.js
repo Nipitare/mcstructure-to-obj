@@ -262,4 +262,4 @@ const wall = {
     }
 }
 
-module.exports = { wall }
+export default wall

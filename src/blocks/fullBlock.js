@@ -19,4 +19,4 @@ const fullBlock = {
     }
 }
 
-module.exports = { fullBlock }
+export default fullBlock
