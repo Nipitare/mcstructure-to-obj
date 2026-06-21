@@ -1,3 +1,4 @@
 *.obj
 *.mcstructure
 temp/
+node_modules/
