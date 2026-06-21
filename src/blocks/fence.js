@@ -1,3 +1,5 @@
+import { getAdjacentDirection, createCubiod } from "../utils/utils.js"
+
 const fence = {
     model(x, y, z, vert, states) {
         const isEast = states.generated.connection_east
@@ -7,155 +9,39 @@ const fence = {
 
         let returnCode = ''
 
-        returnCode = returnCode + `o Cube
-            v ${x+.625} ${y+1} ${z+.375}
-            v ${x+.625} ${y} ${z+.375}
-            v ${x+.625} ${y+1} ${z+.625}
-            v ${x+.625} ${y} ${z+.625}
-            v ${x+.375} ${y+1} ${z+.375}
-            v ${x+.375} ${y} ${z+.375}
-            v ${x+.375} ${y+1} ${z+.625}
-            v ${x+.375} ${y} ${z+.625}
-
-            f ${1+vert} ${5+vert} ${7+vert} ${3+vert}
-            f ${4+vert} ${3+vert} ${7+vert} ${8+vert}
-            f ${8+vert} ${7+vert} ${5+vert} ${6+vert}
-            f ${6+vert} ${2+vert} ${4+vert} ${8+vert}
-            f ${2+vert} ${1+vert} ${3+vert} ${4+vert}
-            f ${6+vert} ${5+vert} ${1+vert} ${2+vert}\n`
+        returnCode += 'o Cube' + createCubiod(x, y, z, 0.375, 0.625, 0, 1, 0.375, 0.625, vert)
         vert += 8
 
         if (isNorth) {
-            returnCode += `
-                v ${x+.625} ${y+.9375} ${z}
-                v ${x+.625} ${y+.75} ${z}
-                v ${x+.625} ${y+.9375} ${z+.375}
-                v ${x+.625} ${y+.75} ${z+.375}
-                v ${x+.375} ${y+.9375} ${z}
-                v ${x+.375} ${y+.75} ${z}
-                v ${x+.375} ${y+.9375} ${z+.375}
-                v ${x+.375} ${y+.75} ${z+.375}
-                v ${x+.625} ${y+.5625} ${z}
-                v ${x+.625} ${y+.375} ${z}
-                v ${x+.625} ${y+.5625} ${z+.375}
-                v ${x+.625} ${y+.375} ${z+.375}
-                v ${x+.375} ${y+.5625} ${z}
-                v ${x+.375} ${y+.375} ${z}
-                v ${x+.375} ${y+.5625} ${z+.375}
-                v ${x+.375} ${y+.375} ${z+.375}
+            returnCode += createCubiod(x, y, z, 0.375, 0.625, 0.75, 0.9375, 0, 0.375, vert)
+            vert += 8
 
-                f ${1+vert} ${5+vert} ${7+vert} ${3+vert}
-                f ${4+vert} ${3+vert} ${7+vert} ${8+vert}
-                f ${8+vert} ${7+vert} ${5+vert} ${6+vert}
-                f ${6+vert} ${2+vert} ${4+vert} ${8+vert}
-                f ${2+vert} ${1+vert} ${3+vert} ${4+vert}
-                f ${6+vert} ${5+vert} ${1+vert} ${2+vert}
-                f ${9+vert} ${13+vert} ${15+vert} ${11+vert}
-                f ${12+vert} ${11+vert} ${15+vert} ${16+vert}
-                f ${16+vert} ${15+vert} ${13+vert} ${14+vert}
-                f ${14+vert} ${10+vert} ${12+vert} ${16+vert}
-                f ${10+vert} ${9+vert} ${11+vert} ${12+vert}
-                f ${14+vert} ${13+vert} ${9+vert} ${10+vert}\n`
-            vert += 16
+            returnCode += createCubiod(x, y, z, 0.375, 0.625, 0.375, 0.5625, 0, 0.375, vert)
+            vert += 8
         }
+
         if (isEast) {
-            returnCode += `
-                v ${x+1} ${y+.9375} ${z+.375}
-                v ${x+1} ${y+.75} ${z+.375}
-                v ${x+1} ${y+.9375} ${z+.625}
-                v ${x+1} ${y+.75} ${z+.625}
-                v ${x+.625} ${y+.9375} ${z+.375}
-                v ${x+.625} ${y+.75} ${z+.375}
-                v ${x+.625} ${y+.9375} ${z+.625}
-                v ${x+.625} ${y+.75} ${z+.625}
-                v ${x+1} ${y+.5625} ${z+.375}
-                v ${x+1} ${y+.375} ${z+.375}
-                v ${x+1} ${y+.5625} ${z+.625}
-                v ${x+1} ${y+.375} ${z+.625}
-                v ${x+.625} ${y+.5625} ${z+.375}
-                v ${x+.625} ${y+.375} ${z+.375}
-                v ${x+.625} ${y+.5625} ${z+.625}
-                v ${x+.625} ${y+.375} ${z+.625}
+            returnCode += createCubiod(x, y, z, 0.625, 1, 0.75, 0.9375, 0.375, 0.625, vert)
+            vert += 8
 
-                f ${1+vert} ${5+vert} ${7+vert} ${3+vert}
-                f ${4+vert} ${3+vert} ${7+vert} ${8+vert}
-                f ${8+vert} ${7+vert} ${5+vert} ${6+vert}
-                f ${6+vert} ${2+vert} ${4+vert} ${8+vert}
-                f ${2+vert} ${1+vert} ${3+vert} ${4+vert}
-                f ${6+vert} ${5+vert} ${1+vert} ${2+vert}
-                f ${9+vert} ${13+vert} ${15+vert} ${11+vert}
-                f ${12+vert} ${11+vert} ${15+vert} ${16+vert}
-                f ${16+vert} ${15+vert} ${13+vert} ${14+vert}
-                f ${14+vert} ${10+vert} ${12+vert} ${16+vert}
-                f ${10+vert} ${9+vert} ${11+vert} ${12+vert}
-                f ${14+vert} ${13+vert} ${9+vert} ${10+vert}\n`
-            vert += 16
+            returnCode += createCubiod(x, y, z, 0.625, 1, 0.375, 0.5625, 0.375, 0.625, vert)
+            vert += 8            
         }
+
         if (isSouth) {
-            returnCode += `
-                v ${x+.625} ${y+.9375} ${z+.625}
-                v ${x+.625} ${y+.75} ${z+.625}
-                v ${x+.625} ${y+.9375} ${z+1}
-                v ${x+.625} ${y+.75} ${z+1}
-                v ${x+.375} ${y+.9375} ${z+.625}
-                v ${x+.375} ${y+.75} ${z+.625}
-                v ${x+.375} ${y+.9375} ${z+1}
-                v ${x+.375} ${y+.75} ${z+1}
-                v ${x+.625} ${y+.5625} ${z+.625}
-                v ${x+.625} ${y+.375} ${z+.625}
-                v ${x+.625} ${y+.5625} ${z+1}
-                v ${x+.625} ${y+.375} ${z+1}
-                v ${x+.375} ${y+.5625} ${z+.625}
-                v ${x+.375} ${y+.375} ${z+.625}
-                v ${x+.375} ${y+.5625} ${z+1}
-                v ${x+.375} ${y+.375} ${z+1}
+            returnCode += createCubiod(x, y, z, 0.375, 0.625, 0.75, 0.9375, 0.625, 1, vert)
+            vert += 8
 
-                f ${1+vert} ${5+vert} ${7+vert} ${3+vert}
-                f ${4+vert} ${3+vert} ${7+vert} ${8+vert}
-                f ${8+vert} ${7+vert} ${5+vert} ${6+vert}
-                f ${6+vert} ${2+vert} ${4+vert} ${8+vert}
-                f ${2+vert} ${1+vert} ${3+vert} ${4+vert}
-                f ${6+vert} ${5+vert} ${1+vert} ${2+vert}
-                f ${9+vert} ${13+vert} ${15+vert} ${11+vert}
-                f ${12+vert} ${11+vert} ${15+vert} ${16+vert}
-                f ${16+vert} ${15+vert} ${13+vert} ${14+vert}
-                f ${14+vert} ${10+vert} ${12+vert} ${16+vert}
-                f ${10+vert} ${9+vert} ${11+vert} ${12+vert}
-                f ${14+vert} ${13+vert} ${9+vert} ${10+vert}\n`
-            vert += 16
+            returnCode += createCubiod(x, y, z, 0.375, 0.625, 0.375, 0.5625, 0.625, 1, vert)
+            vert += 8
         }
-        if (isWest) {
-            returnCode += `
-                v ${x+.375} ${y+.9375} ${z+.375}
-                v ${x+.375} ${y+.75} ${z+.375}
-                v ${x+.375} ${y+.9375} ${z+.625}
-                v ${x+.375} ${y+.75} ${z+.625}
-                v ${x} ${y+.9375} ${z+.375}
-                v ${x} ${y+.75} ${z+.375}
-                v ${x} ${y+.9375} ${z+.625}
-                v ${x} ${y+.75} ${z+.625}
-                v ${x+.375} ${y+.5625} ${z+.375}
-                v ${x+.375} ${y+.375} ${z+.375}
-                v ${x+.375} ${y+.5625} ${z+.625}
-                v ${x+.375} ${y+.375} ${z+.625}
-                v ${x} ${y+.5625} ${z+.375}
-                v ${x} ${y+.375} ${z+.375}
-                v ${x} ${y+.5625} ${z+.625}
-                v ${x} ${y+.375} ${z+.625}
 
-                f ${1+vert} ${5+vert} ${7+vert} ${3+vert}
-                f ${4+vert} ${3+vert} ${7+vert} ${8+vert}
-                f ${8+vert} ${7+vert} ${5+vert} ${6+vert}
-                f ${6+vert} ${2+vert} ${4+vert} ${8+vert}
-                f ${2+vert} ${1+vert} ${3+vert} ${4+vert}
-                f ${6+vert} ${5+vert} ${1+vert} ${2+vert}
-                f ${9+vert} ${13+vert} ${15+vert} ${11+vert}
-                f ${12+vert} ${11+vert} ${15+vert} ${16+vert}
-                f ${16+vert} ${15+vert} ${13+vert} ${14+vert}
-                f ${14+vert} ${10+vert} ${12+vert} ${16+vert}
-                f ${10+vert} ${9+vert} ${11+vert} ${12+vert}
-                f ${14+vert} ${13+vert} ${9+vert} ${10+vert}\n`
-            vert += 16
+        if (isWest) {
+            returnCode += createCubiod(x, y, z, 0, 0.375, 0.75, 0.9375, 0.375, 0.625, vert)
+            vert += 8
+
+            returnCode += createCubiod(x, y, z, 0, 0.375, 0.375, 0.5625, 0.375, 0.625, vert)
+            vert += 8     
         }
 
         return [returnCode, vert]
@@ -165,17 +51,25 @@ const fence = {
         const {x, y, z} = currentBlock.cords
 
         allBlocks.forEach(block => {
-            if (JSON.stringify({x, y, z: z - 1}) == JSON.stringify(block.cords) && block.group != 'air') {
-                states.connection_north = true
-            }
-            if (JSON.stringify({x: x + 1, y, z}) == JSON.stringify(block.cords) && block.group != 'air') {
-                states.connection_east = true
-            }
-            if (JSON.stringify({x, y, z: z + 1}) == JSON.stringify(block.cords) && block.group != 'air') {
-                states.connection_south = true
-            }
-            if (JSON.stringify({x: x - 1, y, z}) == JSON.stringify(block.cords) && block.group != 'air') {
-                states.connection_west = true
+            if (block.group == 'air') return
+
+            switch (getAdjacentDirection(currentBlock.cords, block.cords)) {
+                case "north": {
+                    states.connection_north = true
+                    break
+                }
+                case "east": {
+                    states.connection_east = true
+                    break
+                }
+                case "south": {
+                    states.connection_south = true
+                    break
+                }
+                case "west": {
+                    states.connection_west = true
+                    break
+                }
             }
         })
 
