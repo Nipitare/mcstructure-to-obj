@@ -1,6 +1,6 @@
-const fs = require("fs");
-const nbt = require("prismarine-nbt");
-const data = require("./data");
+const fs = require('fs');
+const nbt = require('prismarine-nbt');
+const { blockData } = require('./blocks')
 
 let blockArray
 let structureSize
@@ -20,7 +20,7 @@ async function getDataFromStructureFile(file) {
   for (let i = 0; i < blockPalette.length; i++) {
     const blockGroup = blockPalette[i].name.value.slice(10).split('_').pop()
        
-    if (data.blockData[blockGroup] != undefined) {
+    if (blockData[blockGroup] != undefined) {
       blockPalette[i].group = blockGroup
     }
     else blockPalette[i].group = 'fullBlock';
@@ -28,7 +28,7 @@ async function getDataFromStructureFile(file) {
   };
 
   for (let i = 0; i < dataArray.length; i++) {
-    dataArray[i] = { "blockName": blockPalette[dataArray[i]].name.value, "blockStates": { "vanilla": blockPalette[dataArray[i]].states.value }, cords: {x, y, z}, "group": blockPalette[dataArray[i]].group }
+    dataArray[i] = { 'blockName': blockPalette[dataArray[i]].name.value, 'blockStates': { 'vanilla': blockPalette[dataArray[i]].states.value }, cords: {x, y, z}, 'group': blockPalette[dataArray[i]].group }
     z++
 
     if (z >= structureSize[2]) {
@@ -43,8 +43,8 @@ async function getDataFromStructureFile(file) {
   };
   // Another loop because data might go missing if code ran in prevoius loop
   for (let i = 0; i < dataArray.length; i++) {
-    if (data.blockData[dataArray[i].group] != undefined && data.blockData[dataArray[i].group].states != undefined) {
-      dataArray[i].blockStates.generated = { ...data.blockData[dataArray[i].group].states(dataArray[i], dataArray) }
+    if (blockData[dataArray[i].group] != undefined && blockData[dataArray[i].group].states != undefined) {
+      dataArray[i].blockStates.generated = { ...blockData[dataArray[i].group].states(dataArray[i], dataArray) }
     }
   }
 
@@ -60,11 +60,11 @@ async function createObj(blocks, size) {
     ({x, y, z} = blocks[i].cords)
 
   try {
-    code += data.blockData[blocks[i].group].model(x, y, z, vert, blocks[i].blockStates)[0]
-    vert = data.blockData[blocks[i].group].model(x, y, z, vert, blocks[i].blockStates)[1]
+    code += blockData[blocks[i].group].model(x, y, z, vert, blocks[i].blockStates)[0]
+    vert = blockData[blocks[i].group].model(x, y, z, vert, blocks[i].blockStates)[1]
   } catch {
-    code += data.blockData.fullBlock.model(x, y, z, vert, blocks[i].blockStates)[0]
-    vert = data.blockData.fullBlock.model(x, y, z, vert, blocks[i].blockStates)[1]
+    code += blockData.fullBlock.model(x, y, z, vert, blocks[i].blockStates)[0]
+    vert = blockData.fullBlock.model(x, y, z, vert, blocks[i].blockStates)[1]
   }
   };
 
@@ -76,7 +76,7 @@ async function createObj(blocks, size) {
 		})
 }
 
-getDataFromStructureFile('fence.mcstructure').then(e => {
+getDataFromStructureFile('stairs.mcstructure').then(e => {
   blockArray = e[0]
   structureSize = e[1]
   createObj(blockArray, structureSize)
