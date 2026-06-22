@@ -1,8 +1,8 @@
-import { createCubiod } from "../utils/utils.js"
+import { createCuboid } from "../utils/utils.js"
 
 const fullBlock = {
     model(x, y, z, vert) {
-        return ['o Cube' + createCubiod(x, y, z, 0, 1, 0, 1, 0, 1, vert), vert += 8]
+        return ['o Cube' + createCuboid(x, y, z, { x1: 0, x2: 1, y1: 0, y2: 1, z1: 0, z2: 1 }, vert), vert += 8]
     }
 }
 

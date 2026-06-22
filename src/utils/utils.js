@@ -6,16 +6,16 @@ export function getAdjacentDirection(currentBlockCords, surroundingBlockCords) {
     return 'none'
 }
 
-export function createCubiod(x, y, z, x1, x2, y1, y2, z1, z2, vert) {
+export function createCuboid(x, y, z, vertexCords, vert) {
     return `
-        v ${x+x1} ${y+y1} ${z+z1}
-        v ${x+x1} ${y+y2} ${z+z1}
-        v ${x+x1} ${y+y1} ${z+z2}
-        v ${x+x1} ${y+y2} ${z+z2}
-        v ${x+x2} ${y+y1} ${z+z1}
-        v ${x+x2} ${y+y2} ${z+z1}
-        v ${x+x2} ${y+y1} ${z+z2}
-        v ${x+x2} ${y+y2} ${z+z2}
+        v ${x+vertexCords.x1} ${y+vertexCords.y1} ${z+vertexCords.z1}
+        v ${x+vertexCords.x1} ${y+vertexCords.y2} ${z+vertexCords.z1}
+        v ${x+vertexCords.x1} ${y+vertexCords.y1} ${z+vertexCords.z2}
+        v ${x+vertexCords.x1} ${y+vertexCords.y2} ${z+vertexCords.z2}
+        v ${x+vertexCords.x2} ${y+vertexCords.y1} ${z+vertexCords.z1}
+        v ${x+vertexCords.x2} ${y+vertexCords.y2} ${z+vertexCords.z1}
+        v ${x+vertexCords.x2} ${y+vertexCords.y1} ${z+vertexCords.z2}
+        v ${x+vertexCords.x2} ${y+vertexCords.y2} ${z+vertexCords.z2}
         
         f ${1+vert} ${5+vert} ${7+vert} ${3+vert}
         f ${4+vert} ${3+vert} ${7+vert} ${8+vert}

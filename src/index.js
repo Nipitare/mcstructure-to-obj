@@ -19,7 +19,7 @@ async function getDataFromStructureFile(file) {
 
   for (let i = 0; i < blockPalette.length; i++) {
     const blockGroup = blockPalette[i].name.value.slice(10).split('_').pop()
-       
+    
     if (blockData[blockGroup] != undefined) {
       blockPalette[i].group = blockGroup
     }
@@ -76,7 +76,7 @@ async function createObj(blocks, size) {
 		})
 }
 
-getDataFromStructureFile('stairs.mcstructure').then(e => {
+getDataFromStructureFile('fenc.mcstructure').then(e => {
   blockArray = e[0]
   structureSize = e[1]
   createObj(blockArray, structureSize)

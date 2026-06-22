@@ -1,4 +1,4 @@
-import { createCubiod } from "../utils/utils.js"
+import { createCuboid } from "../utils/utils.js"
 
 const wall = {
     model(x, y, z, vert, states) {
@@ -17,51 +17,51 @@ const wall = {
         let returnCode = ''
 
         if (!hasPost && isNorthShort && isSouthShort) {
-            return ['o Cube' + createCubiod(x, y, z, 0.3125, 0.6875, 0, 0.8125, 0, 1, vert), vert += 8]
+            return ['o Cube' + createCuboid(x, y, z, { x1: 0.3125, x2: 0.6875, y1: 0, y2: 0.8125, z1: 0, z2: 1 }, vert), vert += 8]
         }
         if (!hasPost && isEastShort && isWestShort) {
-            return ['o Cube' + createCubiod(x, y, z, 0, 1, 0, 0.8125, 0.3125, 0.6875, vert), vert += 8]
+            return ['o Cube' + createCuboid(x, y, z, { x1: 0, x2: 1, y1: 0, y2: 0.8125, z1: 0.3125, z2: 0.6875 }, vert), vert += 8]
         }
         if (!hasPost && isNorthTall && isSouthTall) {
-            return ['o Cube' + createCubiod(x, y, z, 0.3125, 0.6875, 0, 1, 0, 1, vert), vert += 8]
+            return ['o Cube' + createCuboid(x, y, z, { x1: 0.3125, x2: 0.6875, y1: 0, y2: 1, z1:  0, z2: 1 }, vert), vert += 8]
         }
         if (!hasPost && isEastTall && isWestTall) {
-            return ['o Cube' + createCubiod(x, y, z, 0, 1, 0, 1, 0.3125, 0.6875, vert), vert += 8]
+            return ['o Cube' + createCuboid(x, y, z, { x1: 0, x2: 1, y1: 0, y2: 1, z1: 0.3125, z2: 0.6875 }, vert), vert += 8]
         }
 
-        returnCode += 'o Cube' + createCubiod(x, y, z, 0.25, 0.75, 0, 1, 0.25, 0.75, vert)
+        returnCode += 'o Cube' + createCuboid(x, y, z, { x1: 0.25, x2: 0.75, y1: 0, y2: 1, z1: 0.25, z2: 0.75 }, vert)
         vert += 8
 
         if (isNorthShort) {
-            returnCode += createCubiod(x, y, z, 0.3125, 0.6875, 0, 0.8125, 0, 0.25, vert)
+            returnCode += createCuboid(x, y, z, { x1: 0.3125, x2: 0.6875, y1: 0, y2: 0.8125, z1: 0, z2: 0.25 }, vert)
             vert += 8
         }
         if (isEastShort) {
-            returnCode += createCubiod(x, y, z, 0.75, 1, 0, 0.8125, 0.3125, 0.6875, vert)
+            returnCode += createCuboid(x, y, z, { x1: 0.75, x2: 1, y1: 0, y2: 0.8125, z1: 0.3125, z2: 0.6875 }, vert)
             vert += 8
         }
         if (isSouthShort) {
-            returnCode += createCubiod(x, y, z, 0.3125, 0.6875, 0, 0.8125, 0.75, 1, vert)
+            returnCode += createCuboid(x, y, z, { x1: 0.3125, x2: 0.6875, y1: 0, y2: 0.8125, z1: 0.75, z2: 1 }, vert)
             vert += 8
         }
         if (isWestShort) {
-            returnCode += createCubiod(x, y, z, 0, 0.25, 0, 0.8125, 0.3125, 0.6875, vert)
+            returnCode += createCuboid(x, y, z, { x1: 0, x2: 0.25, y1: 0, y2: 0.8125, z1: 0.3125, z2: 0.6875 }, vert)
             vert += 8
         }
         if (isNorthTall) {
-            returnCode += createCubiod(x, y, z, 0.3125, 0.6875, 0, 1, 0, 0.25, vert)
+            returnCode += createCuboid(x, y, z, { x1: 0.3125, x2: 0.6875, y1: 0, y2: 1, z1: 0, z2: 0.25 }, vert)
             vert += 8
         }
         if (isEastTall) {
-            returnCode += createCubiod(x, y, z, 0.75, 1, 0, 1, 0.3125, 0.6875, vert)
+            returnCode += createCuboid(x, y, z, { x1: 0.75, x2: 1, y1: 0, y2: 1, z1: 0.3125, z2: 0.6875 }, vert)
             vert += 8
         }
         if (isSouthTall) {
-            returnCode += createCubiod(x, y, z, 0.3125, 0.6875, 0, 1, 0.75, 1, vert)
+            returnCode += createCuboid(x, y, z, { x1: 0.3125,x2: 0.6875, y1: 0, y2: 1, z1: 0.75, z2: 1 }, vert)
             vert += 8
         }
         if (isWestTall) {
-            returnCode += createCubiod(x, y, z, 0, 0.25, 0, 1, 0.3125, 0.6875, vert)
+            returnCode += createCuboid(x, y, z, { x1: 0, x2: 0.25, y1: 0, y2: 1, z1: 0.3125, z2: 0.6875 }, vert)
             vert += 8
         }
 
