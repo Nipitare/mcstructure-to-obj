@@ -24,3 +24,40 @@ export function createCuboid(x, y, z, vertexCords, vert) {
         f ${2+vert} ${1+vert} ${3+vert} ${4+vert}
         f ${6+vert} ${5+vert} ${1+vert} ${2+vert}\n`
 }
+
+export function rotateModel(model, direction) {
+    const directionToAngle = {
+        'north': 0,
+        'east': 0.5 * Math.PI,
+        'south': Math.PI,
+        'west': 1.5 * Math.PI
+    }
+    const angle = directionToAngle[direction]
+
+    const xCenter = 0.5
+    const zCenter = 0.5
+    
+    let rotatedModel = []
+
+    for (let i = 0; i < model.length; i++) {
+
+        const x = [
+            (xCenter + (model[i].x1 - xCenter) * Math.cos(angle) - (model[i].z1 - zCenter) * Math.sin(angle)).toFixed(6),
+            (xCenter + (model[i].x2 - xCenter) * Math.cos(angle) - (model[i].z2 - zCenter) * Math.sin(angle)).toFixed(6)
+        ]
+
+        const z = [
+            (zCenter + (model[i].x1 - xCenter) * Math.sin(angle) + (model[i].z1 - zCenter) * Math.cos(angle)).toFixed(6),
+            (zCenter + (model[i].x2 - xCenter) * Math.sin(angle) + (model[i].z2 - zCenter) * Math.cos(angle)).toFixed(6)
+        ]
+
+        const x1 = Math.min(x[0], x[1])
+        const x2 = Math.max(x[0], x[1])
+
+        const z1 = Math.min(z[0], z[1])
+        const z2 = Math.max(z[0], z[1])
+
+        rotatedModel.push({ x1, x2, y1: model[i].y1, y2: model[i].y2, z1, z2 })
+    }
+        return rotatedModel
+}
