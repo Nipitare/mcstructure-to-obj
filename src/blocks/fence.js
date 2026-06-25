@@ -1,4 +1,4 @@
-import { getAdjacentDirection, createCuboid } from "../utils/utils.js"
+import { getAdjacentDirection, createCuboidFromBoundingBox } from "../utils/utils.js"
 
 const fence = {
     model(x, y, z, vert, states) {
@@ -9,38 +9,38 @@ const fence = {
 
         let returnCode = ''
 
-        returnCode += 'o Cube' + createCuboid(x, y, z, { x1: 0.375, x2: 0.625, y1: 0, y2: 1, z1: 0.375, z2: 0.625 }, vert)
+        returnCode += 'o Cube' + createCuboidFromBoundingBox(x, y, z, { x1: 0.375, x2: 0.625, y1: 0, y2: 1, z1: 0.375, z2: 0.625 }, vert)
         vert += 8
 
         if (isNorth) {
-            returnCode += createCuboid(x, y, z, { x1: 0.375, x2: 0.625, y1: 0.75, y2: 0.9375, z1: 0, z2: 0.375 }, vert)
+            returnCode += createCuboidFromBoundingBox(x, y, z, { x1: 0.375, x2: 0.625, y1: 0.75, y2: 0.9375, z1: 0, z2: 0.375 }, vert)
             vert += 8
 
-            returnCode += createCuboid(x, y, z, { x1: 0.375, x2: 0.625, y1: 0.375, y2: 0.5625, z1: 0, z2: 0.375}, vert)
+            returnCode += createCuboidFromBoundingBox(x, y, z, { x1: 0.375, x2: 0.625, y1: 0.375, y2: 0.5625, z1: 0, z2: 0.375}, vert)
             vert += 8
         }
 
         if (isEast) {
-            returnCode += createCuboid(x, y, z, { x1: 0.625, x2: 1, y1: 0.75, y2: 0.9375, z1: 0.375, z2: 0.625}, vert)
+            returnCode += createCuboidFromBoundingBox(x, y, z, { x1: 0.625, x2: 1, y1: 0.75, y2: 0.9375, z1: 0.375, z2: 0.625}, vert)
             vert += 8
 
-            returnCode += createCuboid(x, y, z, { x1: 0.625, x2: 1, y1: 0.375, y2: 0.5625, z1: 0.375, z2: 0.625}, vert)
+            returnCode += createCuboidFromBoundingBox(x, y, z, { x1: 0.625, x2: 1, y1: 0.375, y2: 0.5625, z1: 0.375, z2: 0.625}, vert)
             vert += 8            
         }
 
         if (isSouth) {
-            returnCode += createCuboid(x, y, z, { x1: 0.375, x2: 0.625, y1: 0.75, y2: 0.9375, z1: 0.625, z2: 1}, vert)
+            returnCode += createCuboidFromBoundingBox(x, y, z, { x1: 0.375, x2: 0.625, y1: 0.75, y2: 0.9375, z1: 0.625, z2: 1}, vert)
             vert += 8
 
-            returnCode += createCuboid(x, y, z, { x1: 0.375, x2: 0.625, y1: 0.375, y2: 0.5625, z1: 0.625, z2: 1 }, vert)
+            returnCode += createCuboidFromBoundingBox(x, y, z, { x1: 0.375, x2: 0.625, y1: 0.375, y2: 0.5625, z1: 0.625, z2: 1 }, vert)
             vert += 8
         }
 
         if (isWest) {
-            returnCode += createCuboid(x, y, z, { x1: 0, x2: 0.375, y1: 0.75, y2: 0.9375, z1: 0.375, z2: 0.625 }, vert)
+            returnCode += createCuboidFromBoundingBox(x, y, z, { x1: 0, x2: 0.375, y1: 0.75, y2: 0.9375, z1: 0.375, z2: 0.625 }, vert)
             vert += 8
 
-            returnCode += createCuboid(x, y, z, { x1: 0, x2: 0.375, y1: 0.375, y2: 0.5625, z1: 0.375, z2: 0.625 }, vert)
+            returnCode += createCuboidFromBoundingBox(x, y, z, { x1: 0, x2: 0.375, y1: 0.375, y2: 0.5625, z1: 0.375, z2: 0.625 }, vert)
             vert += 8     
         }
 

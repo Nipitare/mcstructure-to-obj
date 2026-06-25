@@ -4,6 +4,7 @@ import fullBlock from './fullBlock.js'
 import gate from './gate.js'
 import slab from './slab.js'
 import stairs from './stairs.js'
+import trapdoor from './trapdoor/trapdoor.js'
 import wall from './wall.js'
 
 const blockData = {
@@ -13,6 +14,7 @@ const blockData = {
     gate,
     slab,
     stairs,
+    trapdoor,
     wall
 }
 

@@ -19,7 +19,7 @@ async function getDataFromStructureFile(file) {
 
   for (let i = 0; i < blockPalette.length; i++) {
     const blockGroup = blockPalette[i].name.value.slice(10).split('_').pop()
-    
+
     if (blockData[blockGroup] != undefined) {
       blockPalette[i].group = blockGroup
     }
@@ -60,11 +60,13 @@ async function createObj(blocks, size) {
     ({x, y, z} = blocks[i].cords)
 
   try {
-    code += blockData[blocks[i].group].model(x, y, z, vert, blocks[i].blockStates)[0]
-    vert = blockData[blocks[i].group].model(x, y, z, vert, blocks[i].blockStates)[1]
+    const processedData = blockData[blocks[i].group].model(x, y, z, vert, blocks[i].blockStates, blocks[i].blockName)
+    code += processedData[0]
+    vert = processedData[1]
   } catch {
-    code += blockData.fullBlock.model(x, y, z, vert, blocks[i].blockStates)[0]
-    vert = blockData.fullBlock.model(x, y, z, vert, blocks[i].blockStates)[1]
+    const processedData = blockData.fullBlock.model(x, y, z, vert, blocks[i].blockStates)
+    code += processedData[0]
+    vert = processedData[1]
   }
   };
 
@@ -76,7 +78,7 @@ async function createObj(blocks, size) {
 		})
 }
 
-getDataFromStructureFile('fenc.mcstructure').then(e => {
+getDataFromStructureFile('alltrapdoors.mcstructure').then(e => {
   blockArray = e[0]
   structureSize = e[1]
   createObj(blockArray, structureSize)

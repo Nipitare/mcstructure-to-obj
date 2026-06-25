@@ -1,4 +1,4 @@
-import { getAdjacentDirection, createCuboid } from "../utils/utils.js"
+import { getAdjacentDirection, createCuboidFromBoundingBox } from "../utils/utils.js"
 
 const stairs = {
     model(x, y, z, vert, states) {
@@ -13,11 +13,11 @@ const stairs = {
         let returnCode = ''
 
         if (isUpsideDown == 1) {
-            returnCode += 'o Cube' + createCuboid(x, y, z, { x1: 0, x2: 1, y1: 0.5, y2: 1, z1: 0, z2: 1}, vert)
+            returnCode += 'o Cube' + createCuboidFromBoundingBox(x, y, z, { x1: 0, x2: 1, y1: 0.5, y2: 1, z1: 0, z2: 1}, vert)
             vert += 8
             y -= 0.5
         } else {
-            returnCode += 'o Cube' + createCuboid(x, y, z, { x1: 0, x2: 1, y1: 0, y2: 0.5, z1: 0, z2: 1}, vert)
+            returnCode += 'o Cube' + createCuboidFromBoundingBox(x, y, z, { x1: 0, x2: 1, y1: 0, y2: 0.5, z1: 0, z2: 1}, vert)
             vert += 8
         }   
         
@@ -26,7 +26,7 @@ const stairs = {
                 x2 = 1
                 z2 = .5
 
-                returnCode += createCuboid(x, y, z, { x1: 0.5, x2: 1, y1: 0.5, y2: 1, z1: 0.5, z2: 1}, vert)
+                returnCode += createCuboidFromBoundingBox(x, y, z, { x1: 0.5, x2: 1, y1: 0.5, y2: 1, z1: 0.5, z2: 1}, vert)
                 vert += 8 
             }
 
@@ -34,7 +34,7 @@ const stairs = {
                 x2 = 1
                 z2 = .5
 
-                returnCode += createCuboid(x, y, z, { x1: 0, x2: 0.5, y1: 0.5, y2: 1, z1: 0.5, z2: 1}, vert)
+                returnCode += createCuboidFromBoundingBox(x, y, z, { x1: 0, x2: 0.5, y1: 0.5, y2: 1, z1: 0.5, z2: 1}, vert)
                 vert += 8
             }
             
@@ -43,7 +43,7 @@ const stairs = {
                 z1 = 0.5
                 z2 = 1
 
-                returnCode += createCuboid(x, y, z, { x1: 0.5, x2: 1, y1: 0.5, y2: 1, z1: 0, z2: 0.5}, vert)
+                returnCode += createCuboidFromBoundingBox(x, y, z, { x1: 0.5, x2: 1, y1: 0.5, y2: 1, z1: 0, z2: 0.5}, vert)
                 vert += 8
             }
 
@@ -52,7 +52,7 @@ const stairs = {
                 z1 = 0.5
                 z2 = 1
 
-                returnCode += createCuboid(x, y, z, { x1: 0, x2: 0.5, y1: 0.5, y2: 1, z1: 0, z2: 0.5}, vert)
+                returnCode += createCuboidFromBoundingBox(x, y, z, { x1: 0, x2: 0.5, y1: 0.5, y2: 1, z1: 0, z2: 0.5}, vert)
                 vert += 8
             }
         }
@@ -110,7 +110,7 @@ const stairs = {
             }
         }
 
-        returnCode += createCuboid(x, y, z, {x1, x2, y1: 0.5, y2: 1, z1, z2}, vert)
+        returnCode += createCuboidFromBoundingBox(x, y, z, {x1, x2, y1: 0.5, y2: 1, z1, z2}, vert)
         vert += 8
 
         return [returnCode, vert]

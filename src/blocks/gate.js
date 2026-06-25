@@ -1,4 +1,4 @@
-import { createCuboid, rotateModel } from "../utils/utils.js"
+import { createCuboidFromBoundingBox, rotateCuboidToDirection } from "../utils/utils.js"
 
 const gate = {
     model(x, y, z, vert, states) {
@@ -29,12 +29,12 @@ const gate = {
 
         if (isOpen) {
             for (let i = 0; i < openGateVertexCords.length; i++) {
-                returnCode += createCuboid(x, y, z, rotateModel(openGateVertexCords, direction)[i], vert)
+                returnCode += createCuboidFromBoundingBox(x, y, z, rotateCuboidToDirection(openGateVertexCords, direction)[i], vert)
                 vert += 8
             }
         } else {
             for (let i = 0; i < closedGateVertexCords.length; i++) {
-                returnCode += createCuboid(x, y, z, rotateModel(closedGateVertexCords, direction)[i], vert)
+                returnCode += createCuboidFromBoundingBox(x, y, z, rotateCuboidToDirection(closedGateVertexCords, direction)[i], vert)
                 vert += 8
             }
         }    
